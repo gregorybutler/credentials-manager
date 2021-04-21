@@ -4,10 +4,10 @@ namespace CM.BL
 {
   public readonly struct Credentials : IEquatable<Credentials>, IComparable<Credentials>, IComparable
   {
-    public string UserName { get; }
-    public string UserPassword { get; }
+    public string? UserName { get; }
+    public string? UserPassword { get; }
 
-    public Credentials(string userName, string userPassword)
+    public Credentials(string? userName, string? userPassword)
     {
       UserName = userName;
       UserPassword = userPassword;
@@ -29,6 +29,9 @@ namespace CM.BL
 
       if (string.IsNullOrWhiteSpace(line)) return false;
       if (string.IsNullOrEmpty(delimiter)) return false;
+      
+      var isCommentedOut = line[..2] == "//";
+      if (isCommentedOut) return false;
 
       var row = line.Split(delimiter);
       if (row.Length != validRowLength) return false;

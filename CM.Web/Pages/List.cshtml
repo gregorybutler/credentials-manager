@@ -1,0 +1,21 @@
+@page
+@model ListModel
+
+@{
+    ViewData["Title"] = "List users";
+}
+
+<div class="container">
+    <div class="col-md-12">
+        Users:
+        
+            <div class="cold-md-12">
+                @Model.Users
+            </div>
+       
+    </div>
+    <div class="col-md-12">
+        @Model.Message
+    </div>
+
+</div>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using CM.DL;
 using CM.DL.FilesExceptions;
@@ -8,14 +9,18 @@ namespace CM.BL
   public static class Manager
   {
     private const string FieldDelimiter = ",";
-    private const string CredentialsFile = "Users.txt";
+     
+    private static string CredentialsFile;
+
     private static List<Credentials> _credentials = new();
 
     public static void Initialize()
     {
+      CredentialsFile = "users.txt";
       _credentials = GetCredentials();
 
       CheckForDuplicates();
+      System.Console.WriteLine("test");
     }
 
     private static List<Credentials> GetCredentials()
@@ -70,7 +75,8 @@ namespace CM.BL
     public static bool Delete(string userName)
     {
       var credentials = Find(userName);
-      if (credentials == default) return false;
+      if (!credentials.Validate()) return false;
+      if (credentials.Equals(default) || credentials.Equals(null)) return false;
 
       if (!_credentials.Remove(credentials)) return false;
       var credentialsString = ToString(credentials);
@@ -78,7 +84,7 @@ namespace CM.BL
       return true;
     }
 
-    public static string GetUserNames()
+   public static string GetUserNames()
     {
       var sb = new StringBuilder();
       foreach (var record in _credentials)
@@ -87,7 +93,10 @@ namespace CM.BL
         sb.Append(FieldDelimiter);
       }
 
-      sb.Remove(sb.Length - 1, 1);
+      if (sb.Length - 1 >= 0 && sb.Length > sb.Length - 1)
+      {
+        sb.Remove(sb.Length - 1, 1);
+      }
       return sb.ToString();
     }
 
